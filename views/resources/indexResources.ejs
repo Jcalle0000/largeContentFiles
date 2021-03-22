@@ -8,15 +8,15 @@
 </head>
 <body>
 
-    <%- include('header.ejs') %> 
+    <%- include('../header.ejs') %> 
 
-    <H1>Uploads Collection (Images and PDFs)</H1>
+    <H1>Resource Collection</H1>
 
     <% mfiles.forEach( file=>{  %> 
         <label for="">File Object ID:</label> <%= file._id %> <br>
         <label for="">File Name:</label> <%= file.filename %> <br>
         <label for="">Content Type:</label> <%= file.contentType %> <br>
-        <a href="/index/<%=file.filename%>">View File</a> <br>
+        <a href="/api/pdfs/<%=file.filename%>">View File</a> <br>
         <br>
     <% }) %>
     

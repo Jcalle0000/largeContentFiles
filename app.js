@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");;
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const methodOverride = require('method-override')
 const bodyParser=require('body-parser')
@@ -7,7 +7,6 @@ const Grid=require('gridfs-stream')
 const GridFsStorage=require('multer-gridfs-storage') // compatible with MongoDB version 2 and 3
 // const path=require('path')
 const multer=require('multer');
-const { restart } = require("nodemon");
 dotenv.config();
 const app = express();
 
@@ -19,11 +18,15 @@ mongoose.connect(process.env.DB_CONNECT, { // This is connected to 'secondDataba
 });
 
 const conn = mongoose.connection
-  .once("open", () => console.log("Connected - Large Files - 5500"))
-  .on("error", (error) => {
-    console.log("Mongoose error", error);
-});
-
+  .once(
+      "open", () => console.log("Connected - Large Files - 5400")
+  )
+  .on(
+    "error", (error) => {
+        console.log("Mongoose error", error);
+    }
+  );
+   
 app.set('view engine','ejs') // EJS - html with JS
 
 // GridFsStream Documentation
@@ -141,4 +144,7 @@ app.post('/fileUpload', upload_M.single('uiFile'), (req,res)=>{
     }
 } )
 
-app.listen(process.env.PORT || 5500);
+const pdfRoute=require("./routes/pdf")
+app.use('/api/pdfs', pdfRoute)
+
+app.listen(process.env.PORT || 5400);
