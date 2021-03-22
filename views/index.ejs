@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Files</title>
+</head>
+<body>
+
+    <%- include('header.ejs') %> 
+
+    <H1>All Files (Images and PDFs)</H1>
+
+    <% mfiles.forEach( file=>{  %> 
+        <label for="">File Object ID:</label> <%= file._id %> <br>
+        <label for="">File Name:</label> <%= file.filename %> <br>
+        <label for="">Content Type:</label> <%= file.contentType %> <br>
+        <a href="/index/<%=file.filename%>">View File</a> <br>
+        <br>
+    <% }) %>
+    
+</body>
+</html>
