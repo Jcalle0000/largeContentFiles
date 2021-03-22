@@ -47,9 +47,10 @@ conn.once('open', ()=> { // CallBack vs Function
 
 // End of GridFsStream Documentation
 
-// GridFS Storage Documentation
+// Multer GridFS Storage Documentation
 const storage = new GridFsStorage({
     url: process.env.DB_CONNECT,
+    options:{useUnifiedTopology:true},
     file: (req, file) => {
       if (
           file.mimetype === 'image/jpeg'||
@@ -57,10 +58,14 @@ const storage = new GridFsStorage({
             file.mimetype==='image/png'
       ) {
         return {
-          bucketName: 'uploads' // GridFsBucket bucketName	The GridFs collection to store the file (default: fs)
+            filename:file.originalname,
+            department:req.body.department,
+            bucketName: 'uploads' // GridFsBucket bucketName	The GridFs collection to store the file (default: fs)
         };
       } else if(file.mimetype==='application/pdf'){
           return {
+              filename:file.originalname,
+              department:req.body.department,
               bucketName:'uploads' // GridFsBucket // bucket should match collection name
           };
       } 
@@ -143,6 +148,8 @@ app.post('/fileUpload', upload_M.single('uiFile'), (req,res)=>{
         res.send("Error Uploading File")
     }
 } )
+
+
 
 const pdfRoute=require("./routes/pdf")
 app.use('/api/pdfs', pdfRoute)
