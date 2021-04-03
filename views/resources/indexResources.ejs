@@ -12,12 +12,28 @@
 
     <H1>Resource Collection</H1>
 
+    <!-- GFS FILES documentation -->
     <% mfiles.forEach( file=>{  %> 
         <label for="">File Object ID:</label> <%= file._id %> <br>
         <label for="">File Name:</label> <%= file.filename %> <br>
         <label for="">Content Type:</label> <%= file.contentType %> <br>
         <a href="/api/pdfs/<%=file.filename%>">View File</a> <br>
         <br>
+    <% }) %>
+
+    <h1>Resources with file Object </h1>
+
+    <% resources.forEach( resource=>{  %> 
+        <label for="">Resource Name:</label> <%= resource.name %> <br>
+        <label for="">Resource Category:</label>  <%= resource.category %> <br>
+        <label for="">Resource upload Date:</label>  <%= resource.uploadDate %> <br>
+        <label for="">Resource uploader:</label>  <%= resource.uploader %> <br>
+        <label for="">Resource Class:</label>  <%= resource.class %> <br>
+        <label for="">Resource Department:</label>  <%= resource.department %> <br>
+        <label for="">Resource fileType:</label>  <%= resource.fileType %> <br>
+        <label for="">Resource id:</label>  <%= resource.id %> <br>
+        <a href="/api/pdfs/<%=resource.fileObject%>">View Resource File</a> <br>
+
     <% }) %>
     
 </body>

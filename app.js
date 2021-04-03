@@ -4,13 +4,15 @@ const dotenv = require("dotenv");
 const methodOverride = require('method-override')
 const bodyParser=require('body-parser')
 const Grid=require('gridfs-stream')
+const path = require('path');
 const GridFsStorage=require('multer-gridfs-storage') // compatible with MongoDB version 2 and 3
 // const path=require('path')
 const multer=require('multer');
 dotenv.config();
 const app = express();
 
-app.use(methodOverride('_method')) 
+
+app.use(methodOverride('_method'))
 
 mongoose.connect(process.env.DB_CONNECT, { // This is connected to 'secondDatabase within monggodb cloud
     useNewUrlParser: true,
@@ -19,15 +21,22 @@ mongoose.connect(process.env.DB_CONNECT, { // This is connected to 'secondDataba
 
 const conn = mongoose.connection
   .once(
-      "open", () => console.log("Connected - Large Files - 5400")
+      "open", () => console.log("\n\nConnected - Large Files - 5400\n"+
+        "localhost:5400/api/pdfs\n\n")
   )
   .on(
     "error", (error) => {
         console.log("Mongoose error", error);
     }
   );
-   
+
+// Sending data in some form of a data object
+//( req.body is an object)
+app.use(express.json());
+app.use(express.urlencoded({ extended: false })); //
+
 app.set('view engine','ejs') // EJS - html with JS
+app.use('/assets', express.static('assets')) // css goes here
 
 // GridFsStream Documentation
 // var conn = mongoose.createConnection(process.env.DB_CONNECT); // DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.(Use `node --trace-deprecation ...` to show where the warning was created)(node:15498) [MONGODB DRIVER] Warning: Top-level use of w, wtimeout, j, and fsync is deprecated. Use writeConcern instead.
@@ -40,7 +49,7 @@ conn.once('open', ()=> { // CallBack vs Function
   gfs.collection('uploads') // we specifiy the name for the collection we want to use
   // all set!
   GridFsBucket= new mongoose.mongo.GridFSBucket(conn.db,{
-      bucketName:'uploads'
+      bucketName:'uploads' // collection
   })
 
 })
@@ -57,16 +66,18 @@ const storage = new GridFsStorage({
             file.mimetype==='img/png' ||
             file.mimetype==='image/png'
       ) {
-        return {
-            filename:file.originalname,
-            department:req.body.department,
-            bucketName: 'uploads' // GridFsBucket bucketName	The GridFs collection to store the file (default: fs)
-        };
+        
+        // console.log(file) // return fieldname, originalName, encooding, mimetype
+
+       return {
+           filename:file.originalname,
+           bucketName:'uploads'
+       }
+
       } else if(file.mimetype==='application/pdf'){
           return {
-              filename:file.originalname,
-              department:req.body.department,
-              bucketName:'uploads' // GridFsBucket // bucket should match collection name
+            filename:file.originalname,
+            bucketName:'uploads' // GridFsBucket // bucket should match collection name
           };
       } 
       else {
@@ -141,9 +152,15 @@ app.get('/fileUpload', async(req,res)=>{
 })
 
 // upoload_M is middleWare
+// localhost:5400/fileUpload
 app.post('/fileUpload', upload_M.single('uiFile'), (req,res)=>{
     try{
+
+        // console.log(req.file) // multer documentation refers to uiFile
+        // req.file nice attributes -> id, filename, bucketName, uploadDate
+
         res.redirect('/index') // since we should see this new file in the Index
+    
     }catch(err){
         res.send("Error Uploading File")
     }

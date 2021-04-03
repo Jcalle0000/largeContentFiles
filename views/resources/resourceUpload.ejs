@@ -4,16 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- This drag and drop has all feature references -->
     <title>Resource Upload File</title>
+    <!-- <link href="/assets/style1.css" type="text/css" rel="stylesheet"/>  -->
+    
 </head>
 <body>
     <%- include('../header.ejs') %> 
+    
     <h1>Resource Collection Upload Page</h1>
 
     <form action="/api/pdfs/resourcesUpload" method="POST" enctype="multipart/form-data" >
-        <input type="file" name="uiFile" id="file" class="custom-file-input">
-        <label for="file" class="custom-file-label" >Choose File2</label>
-        <input type="submit" value="submit">
+        <!-- enctype="multipart/form-data" -->
+        <input type="file" name="uiFile" ></input>
+        <label>Resource Name: </label>  <input type="text" name="name" value=""> <br>
+        <label>Category:</label> <input type="text" name="category" value=""> <br>
+        <label>Upload Date:</label> <input type="date" name="date" value=""> <br>
+        <label>Uploader Name:</label> <input type="text" name="uploader" value=""> <br>
+        <label>Class:</label> <input type="text" name="class" value=""> <br>
+        <label>Department:</label> <input type="text" name="department" value=""> <br>
+
+        <label for="file" >Choose File </label>
+        <input type="submit" value="Submit"></input>
     </form>
+
+   
+
 </body>
 </html>
